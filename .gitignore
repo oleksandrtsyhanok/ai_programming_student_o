@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -231,3 +232,15 @@ context/
 # expliciet negeren
 harness/
 improvements.md
+=======
+# Python __pycache__
+__pycache__/
+*.pyc
+
+# uv lock file
+uv.lock
+
+# Project directories
+tests/
+examens/
+>>>>>>> upstream/main

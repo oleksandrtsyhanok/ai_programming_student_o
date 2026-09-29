@@ -1,0 +1,10 @@
+name: RL_env2
+channels:
+  - defaults
+dependencies:
+  - pip
+  - ipykernel
+  - matplotlib
+  - seaborn
+  - tqdm
+prefix: /home/bruno/miniconda3/envs/RL_env2

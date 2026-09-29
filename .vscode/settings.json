@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 {
   "markdown.marp.themes": [
     "themes/ap-theme.css"
   ]
+=======
+{
+  "markdown.marp.themes": [
+    "themes/ap-theme.css"
+  ]
+>>>>>>> upstream/main
 }
