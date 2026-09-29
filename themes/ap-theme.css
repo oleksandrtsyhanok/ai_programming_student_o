@@ -127,6 +127,7 @@ th {
   padding: 0.5em 0.8em;
   border: 1px solid #97000C;
   font-weight: 600;
+  color: #ffffff;
 }
 
 td {
@@ -236,7 +237,11 @@ section.red-bg a {
 }
 
 section.red-bg table thead {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+section.red-bg th {
+  color: #97000C;
 }
 
 section.red-bg td,

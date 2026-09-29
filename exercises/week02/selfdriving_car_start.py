@@ -1,7 +1,7 @@
 """
 Oefening 1: Self-Driving Car (Model-based Reflex Agent)
 ========================================================
-Implementeer een agent die zijn voorligger volgt op 10m.
+Implementeer een agent die zijn voorligger volgt.
 """
 
 
@@ -23,21 +23,12 @@ class Nothing:
 class SelfDrivingCar:
     def __init__(self):
         # TODO: interne state — welke variabele heb je nodig?
-        self.lidar = LidarSensorInput()
-        self.prev_distance = self.lidar.DistanceTo
+        pass
 
     def process(self, sensor_input):
-        # TODO: bereken relatieve snelheid en tijd tot botsing
+        # TODO: bereken relatieve snelheid en tijd tot botsing; 
         #       rem als tijd < 5 seconden
-        relative_speed = self.prev_distance - sensor_input
-        self.prev_distance = sensor_input
-
         action = Nothing()
-
-        if relative_speed > 0:
-            time = sensor_input / relative_speed
-            if time < 5:
-                return Brake()
         return action
 
 
