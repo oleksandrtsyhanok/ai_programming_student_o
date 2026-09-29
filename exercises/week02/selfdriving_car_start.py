@@ -29,9 +29,15 @@ class SelfDrivingCar:
     def process(self, sensor_input):
         # TODO: bereken relatieve snelheid en tijd tot botsing
         #       rem als tijd < 5 seconden
-        relative_speed = self.prev_distance - self.lidar.DistanceTo
+        relative_speed = self.prev_distance - sensor_input
+        self.prev_distance = sensor_input
 
         action = Nothing()
+
+        if relative_speed > 0:
+            time = sensor_input / relative_speed
+            if time < 5:
+                return Brake()
         return action
 
 
