@@ -1,3 +1,23 @@
+from time import time
+import random
+
+
+def timer_func(suppress_output=False):
+    # dit geeft aan hoelang de functie die het meekrijgt heeft gerund
+    def actual_decorator(func):
+        def wrap_func(*args, **kwargs):
+            t1 = time()
+            result = func(*args, **kwargs)
+            t2 = time()
+            if not suppress_output:
+                print(f"Function {func.__name__!r} executed in {(t2 - t1):.4f}s")
+            return result, t2 - t1
+
+        return wrap_func
+
+    return actual_decorator
+
+
 """
 Oefening 1: Insertion Sort
 ===========================
@@ -16,7 +36,73 @@ def insertion_sort(sequence):
         list: De gesorteerde lijst.
     """
     # TODO: implementeer insertion sort
-    pass
+    if len(sequence) == 0:
+        return []
+    sorted_list = []
+    for i in range(len(sequence)):
+        sorted_list.append(sequence[i])
+        i_idx = len(sorted_list) - 1
+        for j in range(len(sorted_list)):
+            if sorted_list[i_idx] > sorted_list[i_idx - 1]:
+                break
+            temp = sorted_list[i_idx]
+            sorted_list[i_idx] = sorted_list[i_idx - 1]
+            sorted_list[i_idx - 1] = temp
+            if i_idx != 1:
+                i_idx -= 1
+
+    return sorted_list
+
+
+@timer_func(suppress_output=True)  # using the decorator
+def bubble_sort(sequence):
+    n = len(sequence)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if sequence[j] > sequence[j + 1]:
+                sequence[j], sequence[j + 1] = (
+                    sequence[j + 1],
+                    sequence[j],
+                )  # switch places
+    return sequence
+
+
+@timer_func(suppress_output=True)  # decorator gebruiken
+def merge_sort(sequence):
+    size = len(sequence)
+    if size > 1:
+        middle = size // 2
+        left_arr = sequence[:middle]
+        right_arr = sequence[middle:]
+
+        merge_sort(left_arr)
+        merge_sort(right_arr)
+
+        p = 0
+        q = 0
+        r = 0
+
+        left_size = len(left_arr)
+        right_size = len(right_arr)
+        while p < left_size and q < right_size:
+            if left_arr[p] < right_arr[q]:
+                sequence[r] = left_arr[p]
+                p += 1
+            else:
+                sequence[r] = right_arr[q]
+                q += 1
+
+            r += 1
+
+        while p < left_size:
+            sequence[r] = left_arr[p]
+            p += 1
+            r += 1
+
+        while q < right_size:
+            sequence[r] = right_arr[q]
+            q += 1
+            r += 1
 
 
 if __name__ == "__main__":
@@ -40,3 +126,27 @@ if __name__ == "__main__":
     # import random
     # import time
     # ...
+    sequence = random.sample(range(1000), 1000)
+    len(sequence)
+    r = 20
+    n = 4000  # repitions
+    average_bubble = 0
+    for i in range(0, r):
+        sequence = random.sample(range(n), n)
+        result = bubble_sort(sequence)
+        average_bubble += result[1] / r
+    print("Average time to complete: " + f"{(average_bubble):.4f}s")
+
+    average_merge = 0
+    for i in range(0, r):
+        sequence = random.sample(range(n), n)
+        result = merge_sort(sequence)
+        average_merge += result[1] / r
+    print("Gemiddelde tijd om sortering te voltooien: " + f"{(average_merge):.4f}s")
+
+    average_insert = 0
+    for i in range(0, r):
+        sequence = random.sample(range(n), n)
+        result = insertion_sort(sequence)
+        average_insert += result[1] / r
+    print("Gemiddelde tijd om sortering te voltooien: " + f"{(average_insert):.4f}s")
