@@ -3,6 +3,7 @@ Oefening 4: Dijkstra
 =====================
 Implementeer Dijkstra voor kortste pad in een gewogen graaf.
 """
+
 import heapq
 
 
@@ -12,9 +13,10 @@ class State:
 
 
 class Node:
-    def __init__(self, state):
-        self.State = state
-        self.Actions = []
+    def __init__(self, state, parent: "Node | None" = None):
+        self.State: State = state
+        self.Actions: list[Edge] = []
+        self.Parent = parent
 
     def add_action(self, action):
         self.Actions.append(action)
@@ -23,8 +25,11 @@ class Node:
 class Edge:
     def __init__(self, from_node, to_node, cost):
         self.FromNode = from_node
-        self.ToNode = to_node
+        self.ToNode: Node = to_node
         self.Cost = cost
+
+    def __lt__(self, other):
+        return self.Cost < self.Cost
 
 
 class Problem:
@@ -35,7 +40,7 @@ class Problem:
     @staticmethod
     def read_from_file(filepath):
         known_nodes = {}
-        with open(filepath, 'r') as file:
+        with open(filepath, "r") as file:
             from_node = file.readline().strip()
             to_node = file.readline().strip()
             initial_node = Problem.get_or_create(known_nodes, from_node)
@@ -77,9 +82,52 @@ class Path:
         return "->".join(node_names) + "=" + str(self.Cost)
 
 
-def dijkstra(problem):
+def contrstuct_path(curr_node: Node):
+    path = []
+    while curr_node is not None:
+        path.append(curr_node.State.Name)
+        curr_node = curr_node.Parent
+
+    return path
+
+
+def dijkstra(problem: Problem):
     # TODO: implementeer Dijkstra met een priority queue (heapq)
-    pass
+    init_node: Node = problem.InitialState
+    goal_state: Node = problem.GoalState
+
+    explored = set()
+    frontier = []
+    [heapq.heappush(frontier, action) for action in init_node.Actions]
+    # heapq.heappush(frontier, init_node.Actions)  # toNode
+    # print(frontier)
+
+    while frontier:
+        first: Edge = heapq.heappop(frontier)
+        node: Node = first.ToNode
+        if node.State.Name == goal_state.State.Name:
+            return contrstuct_path(node)
+
+        explored.add(node.State)
+        for action in node.Actions:
+            if action.ToNode.State not in explored:
+                heapq.heappush(frontier, action)
+                if action.ToNode.Parent is None:
+                    action.ToNode.Parent = node
+
+    return None
+
+
+# def dijkstra_recurive(node: Node, goal_state: Node, explored: set):
+#     if node.State.Name == goal_state.State.Name:
+#         return node
+
+#     explored.add(node.State)
+#     for action in node.Actions:
+#         if action.State not in explored:
+#             result = dijkstra_recurive(action, goal_state, explored)
+#             if result:
+#                 return result
 
 
 # Maak een testgraafbestand aan
