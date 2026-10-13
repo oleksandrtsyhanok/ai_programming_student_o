@@ -2,6 +2,7 @@
 Oefening: TSP met Simulated Annealing
 ======================================
 """
+
 import math
 import random
 
@@ -9,8 +10,13 @@ import numpy as np
 
 
 class TSPSolver:
-    def __init__(self, distance_matrix, initial_temperature=1000,
-                 cooling_rate=0.995, num_iterations=10000):
+    def __init__(
+        self,
+        distance_matrix,
+        initial_temperature=1000,
+        cooling_rate=0.995,
+        num_iterations=10000,
+    ):
         self.distance_matrix = distance_matrix
         self.num_cities = len(distance_matrix)
         self.initial_temperature = initial_temperature
@@ -30,8 +36,9 @@ class TSPSolver:
         """
         distance = 0.0
         for i in range(len(tour) - 1):
-            distance += self.distance_matrix[tour[i]][tour[i + 1]]
-        distance += self.distance_matrix[tour[-1]][tour[0]]  # terug naar start
+            distance += self.distance_matrix[tour[i], tour[i + 1]]
+        distance += self.distance_matrix[tour[len(tour) - 1], tour[0]]
+        # print(distance)
         return distance
 
     @staticmethod
@@ -63,41 +70,36 @@ class TSPSolver:
             Een tuple (best_tour, best_distance): de beste gevonden tour
             (beginnend bij stad 0) en de bijhorende totale afstand.
         """
-        current_tour = list(range(self.num_cities))
-        current_distance = self.total_distance(current_tour)
+        T = self.initial_temperature
 
-        best_tour = current_tour.copy()
-        best_distance = current_distance
+        tour = [s for s in range(self.num_cities)]
+        best_tour, best_distance = tour, self.total_distance(tour)
+        print(f"Current distance: {best_distance} \n")
 
-        temperature = self.initial_temperature
+        for i in range(self.num_iterations):
+            temp = tour[random.randint(0, self.num_cities - 1)]
+            new_tour = [s for s in best_tour if s != temp]
+            new_tour.append(temp)
 
-        for _ in range(self.num_iterations):
-            i, j = random.sample(range(self.num_cities), 2)
-            new_tour = current_tour.copy()
-            new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
             new_distance = self.total_distance(new_tour)
-            delta = new_distance - current_distance
+            de = new_distance - best_distance
+            # print(new_tour)
 
-            if delta < 0 or random.random() < math.exp(-delta / temperature):
-                current_tour = new_tour
-                current_distance = new_distance
+            if de < 0:
+                best_tour, best_distance = new_tour, new_distance
+            else:
+                if random.random() <= math.exp(-de / T):
+                    best_tour, best_distance = new_tour, new_distance
 
-                if current_distance < best_distance:
-                    best_tour = current_tour.copy()
-                    best_distance = current_distance
+            T *= self.cooling_rate
 
-            temperature *= self.cooling_rate
-
-        return self._canonical(best_tour), best_distance
+        return best_tour, best_distance
 
 
 if __name__ == "__main__":
-    distance_matrix = np.array([
-        [0, 29, 20, 21],
-        [29, 0, 15, 18],
-        [20, 15, 0, 25],
-        [21, 18, 25, 0]
-    ])
+    distance_matrix = np.array(
+        [[0, 29, 20, 21], [29, 0, 15, 18], [20, 15, 0, 25], [21, 18, 25, 0]]
+    )
 
     tsp_solver = TSPSolver(distance_matrix)
     best_tour, best_distance = tsp_solver.simulated_annealing()

@@ -35,18 +35,22 @@ WEIGHTS = {
 
 # --------------------- hulpdata ---------------------
 
-AFSTAND_4 = np.array([
-    [0, 29, 20, 21],
-    [29, 0, 15, 18],
-    [20, 15, 0, 25],
-    [21, 18, 25, 0],
-])
+AFSTAND_4 = np.array(
+    [
+        [0, 29, 20, 21],
+        [29, 0, 15, 18],
+        [20, 15, 0, 25],
+        [21, 18, 25, 0],
+    ]
+)
 
-AFSTAND_3 = np.array([
-    [0, 10, 20],
-    [10, 0, 15],
-    [20, 15, 0],
-])
+AFSTAND_3 = np.array(
+    [
+        [0, 10, 20],
+        [10, 0, 15],
+        [20, 15, 0],
+    ]
+)
 
 
 @contextlib.contextmanager
@@ -116,12 +120,8 @@ def test_simulated_annealing_returns_valid_tour():
     with time_limit(10):
         resultaat = solver.simulated_annealing()
 
-    assert isinstance(resultaat, tuple), (
-        f"verwacht tuple, kreeg {type(resultaat)}"
-    )
-    assert len(resultaat) == 2, (
-        f"verwacht 2 elementen, kreeg {len(resultaat)}"
-    )
+    assert isinstance(resultaat, tuple), f"verwacht tuple, kreeg {type(resultaat)}"
+    assert len(resultaat) == 2, f"verwacht 2 elementen, kreeg {len(resultaat)}"
 
     best_tour, best_distance = resultaat
 
@@ -140,9 +140,7 @@ def test_simulated_annealing_returns_valid_tour():
     assert isinstance(best_distance, (int, float)), (
         f"best_distance moet een getal zijn, kreeg {type(best_distance)}"
     )
-    assert best_distance > 0, (
-        f"best_distance moet positief zijn, kreeg {best_distance}"
-    )
+    assert best_distance > 0, f"best_distance moet positief zijn, kreeg {best_distance}"
 
 
 def test_simulated_annealing_vindt_kortere_route():
@@ -179,8 +177,7 @@ def test_simulated_annealing_vier_steden():
     # iteraties. We accepteren een kleine afwijking vanwege de
     # random factor.
     assert best_distance <= 76, (
-        f"SA vond afstand {best_distance}, verwacht <= 76 "
-        f"(optimum = 74)"
+        f"SA vond afstand {best_distance}, verwacht <= 76 (optimum = 74)"
     )
     # Controleer of het optimum effectief gevonden werd
     assert best_tour in ([0, 2, 1, 3], [0, 3, 1, 2]), (
