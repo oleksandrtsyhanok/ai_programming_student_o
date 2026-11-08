@@ -1,9 +1,11 @@
 import pygad
 import numpy as np
 
+
 # Define the fitness function
-def fitness_func(solution, solution_idx):
+def fitness_func(ga_instance, solution, solution_idx):
     return sum(solution)
+
 
 # Define the parameters for the genetic algorithm
 num_generations = 40
@@ -15,13 +17,15 @@ num_genes = 100
 initial_population = np.random.randint(2, size=(sol_per_pop, num_genes))
 
 # Create an instance of the GA
-ga_instance = pygad.GA(num_generations=num_generations,
-                       num_parents_mating=num_parents_mating,
-                       fitness_func=fitness_func,
-                       sol_per_pop=sol_per_pop,
-                       num_genes=num_genes,
-                       initial_population=initial_population,
-                       mutation_percent_genes=5)
+ga_instance = pygad.GA(
+    num_generations=num_generations,
+    num_parents_mating=num_parents_mating,
+    fitness_func=fitness_func,
+    sol_per_pop=sol_per_pop,
+    num_genes=num_genes,
+    initial_population=initial_population,
+    mutation_percent_genes=5,
+)
 
 # Run the genetic algorithm
 ga_instance.run()
